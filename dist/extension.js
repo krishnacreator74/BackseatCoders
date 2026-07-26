@@ -35,20 +35,102 @@ __export(extension_exports, {
 });
 module.exports = __toCommonJS(extension_exports);
 var vscode = __toESM(require("vscode"));
+async function fetcher(persona, context) {
+  const response = await fetch(
+    "http://localhost:1234/v1/chat/completions",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "qwen2.5-coder-7b-instruct",
+        messages: [
+          {
+            role: "system",
+            content: persona
+          },
+          {
+            role: "user",
+            content: context
+          }
+        ]
+      })
+    }
+  );
+  const data = await response.json();
+  return data;
+}
 function activate(context) {
   console.log("New Version DAWG!");
-  const messages = [
-    "\u{1F480} Bro is cooking.",
-    "\u{1F525} LET HIM COOK!",
-    "\u{1F431} meow",
-    "\u{1F602} Stack Overflow speedrun initiated.",
-    "\u{1F913} Interesting approach..."
+  const persona = [
+    {
+      name: "memeGuy",
+      emoji: "\u{1F480}",
+      prompt: `You are Meme Guy.
+
+				Your job is to review code after every save.
+
+				Rules:
+				-Be funny.
+				-Roast the code like a close friend.
+				-Every roast must include one genuinely useful programming tip.
+				-Never insult the programmer personally.
+				-Keep replies under 50 words.
+				-Mention specific parts of the code whenever possible.`
+    },
+    {
+      name: "grumpyCompilerWizard",
+      emoji: "\u{1F9D9}",
+      prompt: `You are an ancient compiler wizard.
+
+				Your job is to review code after every save.
+
+				Rules:
+				-You have spent centuries fixing segmentation faults and null pointers.
+				-Speak in mystical language.
+				-Every response should sound like a prophecy.
+				-Always explain one improvement hidden beneath the jokes.
+				-Keep responses under 50 words.`
+    },
+    {
+      name: "ninjaReviewer",
+      emoji: "\u{1F977}",
+      prompt: `You are a silent ninja code reviewer.
+
+				Your job is to review code after every save.
+
+				Rules:
+				-Speak using very short sentences.
+				-Find the biggest weakness immediately.
+				-No fluff.
+				-Maximum 3 observations.
+				-End every review with a score out of 10.
+				-Keep it under 50 words.`
+    },
+    {
+      name: "C_Veteran-40_year-old",
+      emoji: "\u{1F474}",
+      prompt: `Your job is to review code after every save.
+			
+				Rules:
+				-You have programmed in C for forty years.
+				-You believe every language after C made programming worse.
+				-Complain about modern frameworks.
+				-Still provide excellent programming advice.
+				-Don't become rude.
+				-Keep it under 50 words.`
+    }
   ];
-  const saveListener = vscode.workspace.onDidSaveTextDocument((document) => {
-    const randomIndex = Math.floor(Math.random() * messages.length);
-    vscode.window.showInformationMessage(messages[randomIndex]);
+  const saveListener = vscode.workspace.onDidSaveTextDocument(async (document) => {
+    const randomIndex_1 = Math.floor(Math.random() * persona.length);
     const code = document.getText();
-    console.log(code);
+    const data_1 = await fetcher(JSON.stringify(persona[randomIndex_1].prompt), code);
+    vscode.window.showInformationMessage(persona[randomIndex_1].name + persona[randomIndex_1].emoji + ":" + data_1.choices[0].message.content);
+    var randomIndex_2 = Math.floor(Math.random() * persona.length);
+    randomIndex_1 == randomIndex_2 ? randomIndex_2 = Math.floor(Math.random() * persona.length) : randomIndex_2 = randomIndex_2;
+    const data_2 = await fetcher(JSON.stringify(persona[randomIndex_2].prompt), code);
+    vscode.window.showInformationMessage(persona[randomIndex_2].name + persona[randomIndex_2].emoji + ":" + data_2.choices[0].message.content);
   });
   const disposable = vscode.commands.registerCommand("backseatcoders.helloWorld", () => {
     vscode.window.showInformationMessage("its is working");
