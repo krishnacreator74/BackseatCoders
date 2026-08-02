@@ -1,71 +1,99 @@
-# backseatcoders README
+# 💀 BackseatCoders
 
-This is the README for your extension "backseatcoders". After writing up a brief description, we recommend including the following sections.
+> Never code alone again.
 
-## Features
+BackseatCoders is a VS Code extension that turns your editor into a Twitch stream.
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+Every time you save a file, random AI personalities react to your code using a local language model running through **LM Studio**.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+No cloud.
+No subscriptions.
+Just tiny gremlins living inside your editor.
 
 ---
 
-## Following extension guidelines
+## ✨ Features
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+- 🤖 AI-powered code reactions
+- 🎭 Multiple unique personalities
+- ⚡ Automatically reacts every time you save
+- 🏠 Runs completely locally through LM Studio
+- 🔒 No internet or API keys required
+- 🎲 Random personalities on every save
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+### Current Cast
 
-## Working with Markdown
+- 💀 Twitch Chatter
+- 🧙 Ancient Compiler Wizard
+- 🐒 Monkey
+- 🤡 Brainrot Guy
+- 🐸 Discord Moderator
+- 🥷 Silent Ninja
+- 👴 40-Year C Veteran
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+Every save randomly picks a few personalities to react to your code.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+---
 
-## For more information
+## 🚀 Requirements
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+- Visual Studio Code
+- LM Studio
+- A loaded local language model
 
-**Enjoy!**
+Tested with:
+
+- Gemma 3 4B
+
+Start the LM Studio server before using the extension.
+
+---
+
+## 📸 Example
+
+```
+💀 bro 💀
+
+🧙 Ancient curse detected.
+
+🐸 Rule violation.
+
+👴 Needs pointers.
+
+🤡 chat we're cooked
+```
+
+---
+
+## ⚠️ Known Issues
+
+- Responses depend on the selected local model.
+- Some personalities are still being expanded.
+- This project is currently in active development.
+
+---
+
+## 🛣️ Roadmap
+
+- More personalities
+- Personality settings
+- Custom personalities
+- Better prompt engineering
+- Workspace-aware reactions
+
+---
+
+## 📦 Version
+
+### v0.0.1
+
+Initial release.
+
+- AI personalities
+- Automatic reactions on save
+- LM Studio integration
+- Fully local execution
+
+---
+
+Made because coding alone gets boring.

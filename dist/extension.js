@@ -1,91 +1,4 @@
-"use strict";
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
-// src/extension.ts
-var extension_exports = {};
-__export(extension_exports, {
-  activate: () => activate,
-  deactivate: () => deactivate
-});
-module.exports = __toCommonJS(extension_exports);
-var vscode = __toESM(require("vscode"));
-async function fetcher(persona, context) {
-  const response = await fetch(
-    "http://localhost:1234/v1/chat/completions",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gemma-3-4b",
-        messages: [
-          {
-            role: "system",
-            content: persona
-          },
-          {
-            role: "user",
-            content: context
-          }
-        ]
-      })
-    }
-  );
-  const data = await response.json();
-  return data;
-}
-async function personaGenerator(code, persona, num) {
-  let numlist = [];
-  let randomNum = 0;
-  for (let i = 0; i < num; i++) {
-    if (numlist.length == 0) {
-      numlist.push(Math.floor(Math.random() * persona.length));
-    } else {
-      randomNum = Math.floor(Math.random() * persona.length);
-      while (numlist.includes(randomNum)) {
-        randomNum = Math.floor(Math.random() * persona.length);
-      }
-      numlist.push(randomNum);
-    }
-  }
-  for (let i = 0; i < numlist.length; i++) {
-    let data = await fetcher(persona[numlist[i]].prompt, code.getText());
-    vscode.window.showInformationMessage(persona[numlist[i]].emoji + "   " + data.choices[0].message.content);
-  }
-}
-function activate(context) {
-  console.log("New Version DAWG!");
-  const persona = [
-    {
-      emoji: "\u{1F480}",
-      prompt: `
+"use strict";var c=Object.create;var r=Object.defineProperty;var d=Object.getOwnPropertyDescriptor;var h=Object.getOwnPropertyNames;var u=Object.getPrototypeOf,p=Object.prototype.hasOwnProperty;var w=(o,e)=>{for(var a in e)r(o,a,{get:e[a],enumerable:!0})},l=(o,e,a,t)=>{if(e&&typeof e=="object"||typeof e=="function")for(let s of h(e))!p.call(o,s)&&s!==a&&r(o,s,{get:()=>e[s],enumerable:!(t=d(e,s))||t.enumerable});return o};var g=(o,e,a)=>(a=o!=null?c(u(o)):{},l(e||!o||!o.__esModule?r(a,"default",{value:o,enumerable:!0}):a,o)),v=o=>l(r({},"__esModule",{value:!0}),o);var b={};w(b,{activate:()=>f,deactivate:()=>M});module.exports=v(b);var i=g(require("vscode"));async function y(o,e){return await(await fetch("http://localhost:1234/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"gemma-3-4b",messages:[{role:"system",content:o},{role:"user",content:e}]})})).json()}async function x(o,e,a){let t=[],s=0;for(let n=0;n<a;n++)if(t.length===0)t.push(Math.floor(Math.random()*e.length));else{for(s=Math.floor(Math.random()*e.length);t.includes(s);)s=Math.floor(Math.random()*e.length);t.push(s)}for(let n=0;n<t.length;n++){let m=await y(e[t[n]].prompt,o.getText());i.window.showInformationMessage(e[t[n]].emoji+"   "+m.choices[0].message.content)}}function f(o){console.log("New Version DAWG!");let e=[{emoji:"\u{1F480}",prompt:`
 
 				You are a Twitch chatter.
 
@@ -125,11 +38,7 @@ function activate(context) {
 				
 				wallahi this compiles?
 				
-				chat is this real?`
-    },
-    {
-      emoji: "\u{1F9D9}",
-      prompt: `
+				chat is this real?`},{emoji:"\u{1F9D9}",prompt:`
 				
 				You are an old wizard in Twitch chat.
 
@@ -145,11 +54,7 @@ function activate(context) {
 
 				The scroll rejects thee.
 
-				Hex successful.`
-    },
-    {
-      emoji: "\u{1F412}",
-      prompt: `You are a monkey.
+				Hex successful.`},{emoji:"\u{1F412}",prompt:`You are a monkey.
 
 				Maximum 5 words.
 
@@ -161,11 +66,7 @@ function activate(context) {
 
 				Monkey see monkey do.
 
-				Monkey brain says yes.`
-    },
-    {
-      emoji: "\u{1F921}",
-      prompt: `
+				Monkey brain says yes.`},{emoji:"\u{1F921}",prompt:`
 				you Brainrot Twitch Guy
 				
 				Maximum 5 words.
@@ -193,11 +94,7 @@ function activate(context) {
 
 				runtime jumpscare
 
-				bro summoned production`
-    },
-    {
-      emoji: "\u{1F438}",
-      prompt: `You are a discord mod.
+				bro summoned production`},{emoji:"\u{1F438}",prompt:`You are a discord mod.
 			
 			maximum 5 words.
 			
@@ -221,11 +118,7 @@ function activate(context) {
 
 				Cringe.
 
-			`
-    },
-    {
-      emoji: "\u{1F977}",
-      prompt: `You are a silent elite ninja code reviewer.
+			`},{emoji:"\u{1F977}",prompt:`You are a silent elite ninja code reviewer.
 
 				You are a ninja.
 
@@ -243,11 +136,7 @@ function activate(context) {
 
 				Acceptable.			
 				
-				Mission failed.`
-    },
-    {
-      emoji: "\u{1F474}",
-      prompt: `Your job is to review code after every save.
+				Mission failed.`},{emoji:"\u{1F474}",prompt:`Your job is to review code after every save.
 
 				You are a retired C programmer.
 
@@ -269,23 +158,4 @@ function activate(context) {
 				Kids these days.
 
 				Segfault builds character.
-				`
-    }
-  ];
-  const saveListener = vscode.workspace.onDidSaveTextDocument(async (document) => {
-    const numbTimes = Math.floor(Math.random() * 3);
-    await personaGenerator(document, persona, numbTimes);
-  });
-  const disposable = vscode.commands.registerCommand("backseatcoders.helloWorld", () => {
-    vscode.window.showInformationMessage("its is working");
-  });
-  context.subscriptions.push(disposable, saveListener);
-}
-function deactivate() {
-}
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  activate,
-  deactivate
-});
-//# sourceMappingURL=extension.js.map
+				`}],a=i.workspace.onDidSaveTextDocument(async s=>{let n=Math.floor(Math.random()*3);await x(s,e,n)}),t=i.commands.registerCommand("backseatcoders.helloWorld",()=>{i.window.showInformationMessage("its is working")});o.subscriptions.push(t,a)}function M(){}0&&(module.exports={activate,deactivate});
