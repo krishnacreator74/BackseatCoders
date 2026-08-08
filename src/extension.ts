@@ -1,10 +1,81 @@
-"use strict";var p=Object.create;var c=Object.defineProperty;var d=Object.getOwnPropertyDescriptor;var u=Object.getOwnPropertyNames;var g=Object.getPrototypeOf,y=Object.prototype.hasOwnProperty;var w=(a,e)=>{for(var t in e)c(a,t,{get:e[t],enumerable:!0})},h=(a,e,t,s)=>{if(e&&typeof e=="object"||typeof e=="function")for(let o of u(e))!y.call(a,o)&&o!==t&&c(a,o,{get:()=>e[o],enumerable:!(s=d(e,o))||s.enumerable});return a};var v=(a,e,t)=>(t=a!=null?p(g(a)):{},h(e||!a||!a.__esModule?c(t,"default",{value:a,enumerable:!0}):t,a)),N=a=>h(c({},"__esModule",{value:!0}),a);var R={};w(R,{activate:()=>x,deactivate:()=>C});module.exports=N(R);var i=v(require("vscode"));async function f(a,e){return await(await fetch("http://localhost:1234/v1/chat/completions",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"gemma-3-4b",messages:[{role:"system",content:a},{role:"user",content:e}]})})).json()}async function k(a,e,t,s){let o=[],n=0;for(let r=0;r<t;r++)if(o.length===0)o.push(Math.floor(Math.random()*e.length));else{for(n=Math.floor(Math.random()*e.length);o.includes(n);)n=Math.floor(Math.random()*e.length);o.push(n)}for(let r=0;r<o.length;r++){let m=`
+// The module 'vscode' contains the VS Code extensibility API
+// Import the module and reference it with the alias vscode in your code below
+import * as vscode from 'vscode';
+
+// This method is called when your extension is activated
+// Your extension is activated the very first time the command is executed
+async function fetcher(persona:string, context:string){
+
+	const response = await fetch(
+
+		"http://localhost:1234/v1/chat/completions",
+
+		{
+			method:"POST",
+			
+			headers:{
+				"Content-Type":"application/json"
+			},
+
+			body: JSON.stringify({
+
+				model: "gemma-3-4b",
+
+				messages:[
+					{
+						role: "system",
+						content: persona
+					},
+					{
+						role: "user",
+						content: context
+					}
+				]
+
+			})
+
+
+		}
+
+	);
+
+	const data = await response.json();
+
+	return data;
+}
+
+async function personaGenerator(code: vscode.TextDocument, persona: any[], num: number , chatlog: string[]){
+
+	let numlist: number[] = [];
+	let randomNum = 0;
+
+	
+	for (let i = 0; i<num; i++){
+
+
+		if( numlist.length === 0){
+			numlist.push(Math.floor(Math.random() * persona.length));
+		}
+		else{
+			randomNum = Math.floor(Math.random() * persona.length);
+			
+			while(numlist.includes(randomNum)){
+				randomNum = Math.floor(Math.random() * persona.length);
+			}
+
+			numlist.push(randomNum);
+		}
+
+	}
+
+	for (let i = 0; i<numlist.length; i++){
+
+		const context = `
 			CODE:
-			${a.getText()}
+			${code.getText()}
 
 			CHAT SO FAR:
-			${s.join(`
-`)}
+			${chatlog.join("\n")}
 			
 			INSTRUCTION:
 			You are currently in a group chat with the other characters above.
@@ -15,7 +86,32 @@
 			Do NOT review the code again unless the previous message gives you a reason to.
 			Keep your response in character and follow your personality rules.
 
-		`,l=await f(e[o[r]].prompt,m);i.window.showInformationMessage(e[o[r]].emoji+" : "+l.choices[0].message.content),s.push(e[o[r]].emoji+" : "+l.choices[0].message.content)}}function x(a){console.log("New Version DAWG!");let e=[{emoji:"\u{1F480}",prompt:`
+		`;
+
+		let data: any = await fetcher(persona[numlist[i]].prompt, context);
+		vscode.window.showInformationMessage(persona[numlist[i]].emoji + " : " + data.choices[0].message.content);
+		chatlog.push(persona[numlist[i]].emoji + " : " + data.choices[0].message.content);
+	}
+
+}
+
+export function activate(context: vscode.ExtensionContext) {
+
+	// Use the console to output diagnostic information (console.log) and errors (console.error)
+	// This line of code will only be executed once when your extension is activated
+	console.log('New Version DAWG!');
+
+	// The command has been defined in the package.json file
+	// Now provide the implementation of the command with registerCommand
+	// The commandId parameter must match the command field in package.json
+
+
+	const persona = [
+
+		{
+			
+			emoji: "💀",
+			prompt: `
 
 			You are a Twitch chatter.
 
@@ -30,20 +126,26 @@
 			- You may argue with other NPCs.
 			- Do not react to other NPCs every time.
 			- Lowercase normally, uppercase for hype.
-			- Occasionally use \u{1F480},\u{1F62D},\u{1F525},\u{1F64F}.
+			- Occasionally use 💀,😭,🔥,🙏.
 			- Never write paragraphs.
 
 			
 			Examples:
 			- L
-			- bro \u{1F480}
+			- bro 💀
 			- ain't no way
 			- LET HIM COOK
 			- chat we're cooked
 			- skill issue
 			- wallahi this compiles?
-			- bro shut up \u{1F62D}
-				`},{emoji:"\u{1F9D9}",prompt:`
+			- bro shut up 😭
+				`
+		},
+		
+		{
+
+			emoji: "🧙",
+			prompt: `
 				
 			You are an ancient wizard in Twitch chat.
 
@@ -68,7 +170,13 @@
 			- Foolish wizardry.
 			- The curse spreads.
 				
-				`},{emoji:"\u{1F412}",prompt:`You are a monkey.
+				`
+
+		},
+
+		{
+			emoji: "🐒",
+			prompt: `You are a monkey.
 
 			Rules:
 			- Maximum 5 words.
@@ -80,7 +188,7 @@
 			- You may copy or mock other NPCs.
 			- Never explain anything.
 			- Never write paragraphs.
-			- Use occasional \u{1F412} energy.
+			- Use occasional 🐒 energy.
 
 			Examples:
 			- Ooh ooh ah ah.
@@ -92,7 +200,14 @@
 			- Monkey see bug.
 			- Ooh shiny.
 
-				`},{emoji:"\u{1F987}",prompt:`You are Batman in Twitch chat.
+				`
+
+		},
+
+		{
+
+			emoji: "🦇",
+			prompt: `You are Batman in Twitch chat.
 			
 			Rules:
 			- Maximum 5 words.
@@ -114,7 +229,13 @@
 			- You will answer.
 			- Justice will compile.
 			- This ends tonight.
-			`},{emoji:"\u{1F921}",prompt:`
+			`
+		
+		},
+
+		{
+			emoji: "🤡",
+			prompt: `
 			You are a brainrot Twitch chatter.
 			
 			Rules:
@@ -122,7 +243,7 @@
 			- Speak almost entirely in internet slang.
 			- Be absurd and unpredictable.
 			- React instantly.
-			- Use \u{1F480}\u{1F62D}\u{1F525}\u{1F64F} occasionally.
+			- Use 💀😭🔥🙏 occasionally.
 			- React to code OR other NPCs.
 			- Mock other NPCs when funny.
 			- Never explain.
@@ -131,16 +252,21 @@
 			- Occasionally use phrases like "chat", "bro", "wallahi", "cooked", "prod", "L", "W".
 
 			Examples:
-			- bro \u{1F480}
+			- bro 💀
 			- chat cooked
 			- nah we're finished
 			- CPU fighting demons
 			- L code
 			- bro summoned production
 			- wallahi it's over
-			- this ain't real \u{1F62D}
+			- this ain't real 😭
 
-				`},{emoji:"\u{1F438}",prompt:`You are an authoritarian Discord moderator.
+				`
+		},
+
+		{
+			emoji: "🐸",
+			prompt: `You are an authoritarian Discord moderator.
 			
 			Rules:
 			- Maximum 5 words.
@@ -164,7 +290,13 @@
 			- Stop spamming.
 			- Warning issued.
 			- Respectfully, no.
-			`},{emoji:"\u{1F977}",prompt:`You are a silent elite ninja.
+			`
+		},
+
+		{
+
+			emoji: "🥷",
+			prompt: `You are a silent elite ninja.
 
 			Rules:
 			- Maximum 5 words.
@@ -190,7 +322,14 @@
 			- Move.
 			- Silence.
 
-			`},{emoji:"\u{1F474}",prompt:`You are a retired C programmer.
+			`
+		
+		},
+
+		{
+
+			emoji: "👴",
+			prompt: `You are a retired C programmer.
 
 			Rules:
 			- Maximum 5 words.
@@ -216,4 +355,32 @@
 			- C would've worked.
 			- Another framework? Really?
 
-				`}],t=i.workspace.onDidSaveTextDocument(async o=>{let n=[],r=Math.floor(Math.random()*3+1);await k(o,e,r,n)}),s=i.commands.registerCommand("backseatcoders.helloWorld",()=>{i.window.showInformationMessage("its is working")});a.subscriptions.push(s,t)}function C(){}0&&(module.exports={activate,deactivate});
+				`
+
+		}
+
+	];
+
+	
+	const saveListener = vscode.workspace.onDidSaveTextDocument(async(document) => {
+		
+		const chatlog: string[] = [];
+
+		const numbTimes = Math.floor(Math.random() * 3 + 1);
+		await personaGenerator(document, persona, numbTimes, chatlog);
+
+	});
+
+	const disposable = vscode.commands.registerCommand('backseatcoders.helloWorld', () => {
+		// The code you place here will be executed every time your command is executed
+		// Display a message box to the user
+
+		vscode.window.showInformationMessage("its is working");
+	});
+
+	context.subscriptions.push(disposable, saveListener);
+}
+
+// This method is called when your extension is deactivated
+export function deactivate() {}
+
