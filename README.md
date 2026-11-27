@@ -4,10 +4,11 @@
 
 BackseatCoders is a VS Code extension that turns your editor into a Twitch stream.
 
-Every time you save a file, random AI personalities react to your code using a local language model running through **LM Studio**.
+Every time you save a file, random AI personalities react to your code using a local language model powered by **LM Studio** or **Ollama**.
 
-No cloud.
-No subscriptions.
+No cloud AI APIs.  
+No subscriptions.  
+No API keys.  
 Just tiny gremlins living inside your editor.
 
 ---
@@ -17,9 +18,12 @@ Just tiny gremlins living inside your editor.
 - 🤖 AI-powered code reactions
 - 🎭 Multiple unique personalities
 - ⚡ Automatically reacts every time you save
-- 🏠 Runs completely locally through LM Studio
-- 🔒 No internet or API keys required
+- 🏠 Runs locally using LM Studio or Ollama
+- 🔒 No cloud inference or API keys required
 - 🎲 Random personalities on every save
+- 🔄 Switch between supported providers
+- 🧠 Automatically discovers available local models
+- 💾 Remembers your selected model
 
 ### Current Cast
 
@@ -38,20 +42,31 @@ Every save randomly picks a few personalities to react to your code.
 ## 🚀 Requirements
 
 - Visual Studio Code
-- LM Studio
-- A loaded local language model
+- **Either LM Studio or Ollama**
+- At least one locally available language model
 
-Tested with:
+### Supported Providers
 
-- Gemma 3 4B
+**LM Studio**
+- Install [LM Studio](https://lmstudio.ai/)
+- Download a compatible local language model.
+- Load the model.
+- Start the local server.
 
-Start the LM Studio server before using the extension.
+**Ollama**
+- Install [Ollama](https://ollama.com/)
+- Download a model using Ollama.
+- Make sure the Ollama server is running.
+
+BackseatCoders automatically discovers available models from your selected provider.
+
+You can configure your provider, endpoint, and model through VS Code settings.
 
 ---
 
 ## 📸 Example
 
-```
+```text
 💀 bro 💀
 
 🧙 Ancient curse detected.
@@ -85,14 +100,17 @@ Start the LM Studio server before using the extension.
 
 ## 📦 Version
 
-### v0.0.1
+### v0.1.0
 
-Initial release.
+Initial development release.
 
 - AI personalities
 - Automatic reactions on save
 - LM Studio integration
-- Fully local execution
+- Ollama integration
+- Automatic model discovery
+- Configurable provider and endpoint
+- Model selection and persistence
 
 ---
 

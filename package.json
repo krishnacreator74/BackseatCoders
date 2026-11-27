@@ -3,6 +3,8 @@
   "displayName": "BackseatCoders",
   "description": "Never code alone again.",
   "version": "0.1.0",
+  "icon": "images/icon.png",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.125.0"
   },
