@@ -2,12 +2,12 @@ import * as vscode from 'vscode';
 import fetcher from '../services/llm';
 import { Persona } from '../types/persona';
 
-async function personaGenerator(code: vscode.TextDocument, persona: Persona[], num: number , chatlog: string[]){
+async function personaGenerator(code: vscode.TextDocument, persona: Persona[], num: number , chatlog: string[], selectedModel: string|undefined, endpoint: string|undefined){
 
 	let numlist: number[] = [];
 	let randomNum = 0;
     const messages: string[] = [];
-	
+
 	for (let i = 0; i<num; i++){
 
 
@@ -48,7 +48,7 @@ async function personaGenerator(code: vscode.TextDocument, persona: Persona[], n
 
 		`;
 
-		let data: any = await fetcher(persona[numlist[i]].prompt, context);
+		let data: any = await fetcher(persona[numlist[i]].prompt, context, selectedModel, endpoint);
 		const msg = persona[numlist[i]].emoji + " : " + data.choices[0].message.content;
         messages.push(msg);
 		chatlog.push(msg);
